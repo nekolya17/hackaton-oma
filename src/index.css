@@ -1,0 +1,202 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --color-oma-violet-deep: #2B0B73;
+  --color-oma-violet: #3B108C;
+  --color-oma-violet-light: #5A2EAF;
+  --color-oma-turquoise: #00B4D8;
+  --color-oma-turquoise-dark: #00A8C6;
+  --color-oma-turquoise-light: #90E0EF;
+  --color-oma-kstati: #F04E37;
+  --color-oma-kstati-light: #FF7B6B;
+  --color-oma-pro-yellow: #FACC15;
+  --color-oma-pro-charcoal: #18181B;
+  --color-oma-bg-start: #E8ECFF;
+  --color-oma-bg-mid: #F2F4FF;
+  --color-oma-bg-end: #E4F5FA;
+  --font-family-inter: 'Inter', system-ui, sans-serif;
+  --font-family-manrope: 'Manrope', system-ui, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-inter);
+  background: linear-gradient(135deg, var(--color-oma-bg-start), var(--color-oma-bg-mid), var(--color-oma-bg-end));
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Leaflet container fix */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  z-index: 1;
+}
+
+/* Fix leaflet default marker icon paths */
+.leaflet-default-icon-path {
+  background-image: none;
+}
+
+/* Pulsing marker animation */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.pulse-marker {
+  position: relative;
+}
+
+.pulse-marker::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(0, 180, 216, 0.4);
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 16, 140, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 16, 140, 0.4);
+}
+
+/* Smooth tab transitions */
+.tab-content-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.tab-content-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Toast animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.toast-enter {
+  animation: slideInRight 0.4s ease-out forwards;
+}
+
+.toast-exit {
+  animation: slideOutRight 0.3s ease-in forwards;
+}
+
+/* Progress bar animation */
+@keyframes progressFill {
+  from { width: 0%; }
+  to { width: var(--progress-width); }
+}
+
+.animate-progress {
+  animation: progressFill 1s ease-out forwards;
+}
+
+/* Number counter animation */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-count {
+  animation: countUp 0.6s ease-out forwards;
+}
+
+/* Route dash animation */
+@keyframes dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+/* Confetti canvas */
+.confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Barter animation */
+@keyframes barterDrop {
+  0% { transform: scale(1); color: #ef4444; }
+  50% { transform: scale(1.2); color: #FACC15; }
+  100% { transform: scale(1); color: #22c55e; }
+}
+
+.animate-barter {
+  animation: barterDrop 1s ease-out;
+}
+
+/* Hex glow */
+@keyframes hexGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+.hex-glow {
+  animation: hexGlow 2s ease-in-out infinite;
+}
