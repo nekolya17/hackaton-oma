@@ -28,29 +28,19 @@ def quote(request: QuoteRequest) -> QuoteResponse:
         raise InvalidSelection("Для установки можно выбрать только товары из корзины")
     if installed and not request.slot_id:
         raise InvalidSelection("Для установки нужно выбрать время")
-    if not installed and (request.slot_id or request.use_bonus or request.consumable_ids_by_product):
-        raise InvalidSelection("Без установки слот, расходники и бонусы не применяются")
-    if any(product_id not in installed for product_id in request.consumable_ids_by_product):
-        raise InvalidSelection("Расходники можно выбрать только для устанавливаемых товаров")
+    if not installed and (request.slot_id or request.use_bonus):
+        raise InvalidSelection("Без установки слот и бонусы не применяются")
 
     products_price = sum(cents(PRODUCT_BY_ID[product_id].price) for product_id in purchased)
     installation_price = 0
-    consumables_price = 0
     items: list[InstallationItem] = []
     multiplier = Decimal(str(SLOT_BY_ID[request.slot_id].installation_multiplier)) if request.slot_id else Decimal(0)
 
     for product_id in installed:
         product = PRODUCT_BY_ID[product_id]
-        chosen_ids = request.consumable_ids_by_product.get(product_id, [])
-        options = {item.id: item for item in product.consumables}
-        if len(chosen_ids) != len(set(chosen_ids)) or any(item_id not in options for item_id in chosen_ids):
-            raise InvalidSelection(f"Неверные расходники для товара {product_id}")
-
         item_installation = int((Decimal(cents(product.installation_price)) * multiplier).quantize(Decimal("1"), rounding=ROUND_HALF_UP))
-        chosen = [options[item_id] for item_id in chosen_ids]
         installation_price += item_installation
-        consumables_price += sum(cents(item.price) for item in chosen)
-        items.append(InstallationItem(product_id=product_id, installation_price=money(item_installation), consumables=chosen))
+        items.append(InstallationItem(product_id=product_id, installation_price=money(item_installation)))
 
     bonus_discount = min(700, installation_price * 20 // 100) if request.use_bonus else 0
     return QuoteResponse(
@@ -59,7 +49,6 @@ def quote(request: QuoteRequest) -> QuoteResponse:
         slot_id=request.slot_id,
         products_price=money(products_price),
         installation_price=money(installation_price),
-        consumables_price=money(consumables_price),
         bonus_discount=money(bonus_discount),
-        total_price=money(products_price + installation_price + consumables_price - bonus_discount),
+        total_price=money(products_price + installation_price - bonus_discount),
     )

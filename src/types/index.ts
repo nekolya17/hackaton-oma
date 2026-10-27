@@ -1,9 +1,19 @@
-export type TabId = 'customer' | 'dispatcher' | 'master' | 'economics';
+export type TabId = 'customer' | 'service' | 'dispatcher' | 'master' | 'economics';
 
-export interface Consumable {
+export interface ServiceRequest {
   id: string;
-  name: string;
-  price: number;
+  source: 'direct' | 'cart';
+  description: string;
+  productIds: string[];
+  arrivalWindow: string;
+  deliveryWindow?: string;
+  address: string;
+  district: string;
+  coordinates: [number, number];
+  estimatedPrice: number;
+  status: 'pending' | 'assigned';
+  assignedMasterId?: string;
+  createdAt: Date;
 }
 
 export interface Product {
@@ -12,9 +22,6 @@ export interface Product {
   price: number;
   installationPrice: number;
   marketPrice: number;
-  consumables: string;
-  consumablesPrice: number;
-  consumablesOptions: Consumable[];
   category: string;
   icon: string;
   imageUrl?: string;
@@ -31,9 +38,10 @@ export interface TimeSlot {
 
 export interface Order {
   id: string;
+  serviceRequestId?: string;
   product: Product;
   purchasedProducts?: Product[];
-  items?: { product: Product; installationPrice: number; consumables: Consumable[] }[];
+  items?: { product: Product; installationPrice: number }[];
   slot: TimeSlot;
   address: string;
   district: string;
@@ -84,7 +92,6 @@ export interface AlgorithmMetrics {
   idleKmSaved: number;
   clientSaving: number;
   stmUpsell: number;
-  pitstopTime: number;
 }
 
 export interface BarterState {
@@ -117,8 +124,9 @@ export interface IncomingOrder {
   deviation: string;
   tasks: string;
   duration: string;
-  consumablesPickup: string;
   income: number;
   clusterDetails?: string;
   accepted: boolean;
+  coordinates: [number, number];
+  serviceRequestId?: string;
 }

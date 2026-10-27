@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
-import { TabId, Order, Toast, BarterState, LoyaltyState, IncomingOrder } from '../types';
-import { products, timeSlots, incomingOrders as defaultIncomingOrders } from '../data/mockData';
+import { TabId, Order, Toast, BarterState, LoyaltyState, IncomingOrder, ServiceRequest } from '../types';
+import { incomingOrders as defaultIncomingOrders } from '../data/mockData';
 
 interface AppState {
   activeTab: TabId;
   setActiveTab: (tab: TabId) => void;
   orders: Order[];
   addOrder: (order: Order) => void;
-  simulateNewOrder: () => void;
+  serviceRequests: ServiceRequest[];
+  createServiceRequest: (request: Omit<ServiceRequest, 'id' | 'status' | 'assignedMasterId' | 'createdAt'>) => string;
   toasts: Toast[];
   addToast: (toast: Omit<Toast, 'id'>) => void;
   removeToast: (id: string) => void;
@@ -19,8 +20,6 @@ interface AppState {
   runAlgorithm: () => void;
   incomingOrders: IncomingOrder[];
   acceptOrder: (id: string) => void;
-  showConfirmationModal: boolean;
-  setShowConfirmationModal: (show: boolean) => void;
 }
 
 const AppContext = createContext<AppState | undefined>(undefined);
@@ -31,8 +30,8 @@ let toastCounter = 0;
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [activeTab, setActiveTab] = useState<TabId>('customer');
   const [orders, setOrders] = useState<Order[]>([]);
+  const [serviceRequests, setServiceRequests] = useState<ServiceRequest[]>([]);
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [barterState, setBarterState] = useState<BarterState>({
     debtAmount: 480.00,
     earnedAmount: 310.00,
@@ -74,28 +73,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setOrders(prev => [...prev, order]);
   }, []);
 
-  const simulateNewOrder = useCallback(() => {
-    const product = products[Math.floor(Math.random() * products.length)];
-    const slot = timeSlots[0];
-    const newOrder: Order = {
-      id: `order-sim-${++orderCounter}`,
-      product,
-      slot,
-      address: 'ЖК «Минск-Мир», ул. Братская, 14, кв. ' + (Math.floor(Math.random() * 120) + 1),
-      district: 'Минск-Мир',
-      coordinates: [53.8720 + (Math.random() - 0.5) * 0.008, 27.5500 + (Math.random() - 0.5) * 0.01],
-      status: 'pending',
-      useBonus: false,
-      bonusDiscount: 0,
-      totalPrice: product.price + slot.price + product.consumablesPrice,
-      createdAt: new Date(),
-    };
-    setOrders(prev => [...prev, newOrder]);
-    addToast({
-      message: `🆕 Новая заявка в Минск-Мире: ${product.name} — ${slot.price} BYN за установку`,
-      type: 'info',
-      duration: 5000,
-    });
+  const createServiceRequest = useCallback((input: Omit<ServiceRequest, 'id' | 'status' | 'assignedMasterId' | 'createdAt'>) => {
+    const id = `service-${Date.now()}-${++orderCounter}`;
+    const request: ServiceRequest = { ...input, id, status: 'pending', createdAt: new Date() };
+    setServiceRequests(prev => [request, ...prev]);
+    setIncomingOrders(prev => [{
+      id: `incoming-${id}`,
+      type: 'single',
+      district: input.district,
+      address: input.address,
+      deviation: input.source === 'cart' ? 'Время визита связано с доставкой товара' : 'Прямой вызов мастера',
+      tasks: input.description,
+      duration: input.arrivalWindow,
+      income: Math.round(input.estimatedPrice * 0.8),
+      accepted: false,
+      coordinates: input.coordinates,
+      serviceRequestId: id,
+    }, ...prev]);
+    addToast({ message: 'Заявка отправлена. Покажем мастера, когда он примет заказ.', type: 'success' });
+    return id;
   }, [addToast]);
 
   const settleBarter = useCallback(() => {
@@ -126,23 +122,27 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [addToast]);
 
   const acceptOrder = useCallback((id: string) => {
+    const requestId = incomingOrders.find(order => order.id === id)?.serviceRequestId;
     setIncomingOrders(prev => prev.map(o => o.id === id ? { ...o, accepted: true } : o));
+    if (requestId) {
+      setServiceRequests(prev => prev.map(request => request.id === requestId ? { ...request, status: 'assigned', assignedMasterId: 'master-1' } : request));
+      setOrders(prev => prev.map(order => order.serviceRequestId === requestId ? { ...order, status: 'assigned', assignedMasterId: 'master-1' } : order));
+    }
     addToast({
-      message: '✅ Заказ принят в маршрут! Пакет расходников уже ждёт в ОМА КСТАТИ.',
+      message: '✅ Заказ принят в маршрут!',
       type: 'success',
     });
-  }, [addToast]);
+  }, [addToast, incomingOrders]);
 
   return (
     <AppContext.Provider value={{
       activeTab, setActiveTab,
-      orders, addOrder, simulateNewOrder,
+      orders, addOrder, serviceRequests, createServiceRequest,
       toasts, addToast, removeToast,
       barterState, settleBarter,
       loyaltyState,
       algorithmRunning, algorithmMatched, runAlgorithm,
       incomingOrders, acceptOrder,
-      showConfirmationModal, setShowConfirmationModal,
     }}>
       {children}
     </AppContext.Provider>

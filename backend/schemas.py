@@ -1,13 +1,7 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, Field
-
-
-class Consumable(BaseModel):
-    id: str
-    name: str
-    price: float
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Product(BaseModel):
@@ -18,7 +12,6 @@ class Product(BaseModel):
     market_price: float
     category: str
     icon: str
-    consumables: list[Consumable]
 
 
 class TimeSlot(BaseModel):
@@ -28,9 +21,9 @@ class TimeSlot(BaseModel):
 
 
 class QuoteRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     product_ids: list[str] = Field(min_length=1)
     installation_product_ids: list[str] = Field(default_factory=list)
-    consumable_ids_by_product: dict[str, list[str]] = Field(default_factory=dict)
     slot_id: Literal["commute", "cluster"] | None = None
     use_bonus: bool = False
 
@@ -38,7 +31,6 @@ class QuoteRequest(BaseModel):
 class InstallationItem(BaseModel):
     product_id: str
     installation_price: float
-    consumables: list[Consumable]
 
 
 class QuoteResponse(BaseModel):
@@ -47,7 +39,6 @@ class QuoteResponse(BaseModel):
     slot_id: str | None
     products_price: float
     installation_price: float
-    consumables_price: float
     bonus_discount: float
     total_price: float
 

@@ -1,4 +1,4 @@
-from .schemas import Consumable, Product, TimeSlot
+from .schemas import Product, TimeSlot
 
 
 PRODUCTS = (
@@ -10,11 +10,6 @@ PRODUCTS = (
         market_price=95,
         category="Сантехника",
         icon="🚰",
-        consumables=[
-            Consumable(id="faucet-fasteners", name="Крепёж Fix Haus", price=2.40),
-            Consumable(id="faucet-tape", name="ФУМ-лента", price=1.60),
-            Consumable(id="faucet-sealant", name="Герметик Wunder", price=2.50),
-        ],
     ),
     Product(
         id="chandelier",
@@ -24,10 +19,6 @@ PRODUCTS = (
         market_price=80,
         category="Электрика (ILLU)",
         icon="💡",
-        consumables=[
-            Consumable(id="chandelier-dowels", name="Потолочные дюбели и крюк Fix Haus", price=1.80),
-            Consumable(id="chandelier-terminals", name="Клеммы ILLU", price=2.40),
-        ],
     ),
     Product(
         id="curtainrod",
@@ -37,10 +28,6 @@ PRODUCTS = (
         market_price=60,
         category="Сборка и крепёж (Fix Haus)",
         icon="🪟",
-        consumables=[
-            Consumable(id="curtain-brackets", name="Кронштейны Fix Haus", price=3.20),
-            Consumable(id="curtain-anchors", name="Анкеры Fix Haus", price=2.60),
-        ],
     ),
     Product(
         id="greenhouse",
@@ -50,11 +37,6 @@ PRODUCTS = (
         market_price=350,
         category="Сад и Дача (Sato Garden)",
         icon="🌿",
-        consumables=[
-            Consumable(id="greenhouse-pins", name="Фундаментные колышки Werker", price=8.90),
-            Consumable(id="greenhouse-screws", name="Саморезы Fix Haus", price=4.50),
-            Consumable(id="greenhouse-seal", name="Уплотнитель Wunder", price=5.50),
-        ],
     ),
 )
 

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { masters } from '../../data/mockData';
+import { MapContainer, TileLayer, Marker, Polyline, Tooltip } from 'react-leaflet';
+import L from 'leaflet';
+import { mapTiles } from '../../config/mapTiles';
 import { Shield, Star, MapPin, Clock, ArrowRight, CheckCircle, RefreshCw, TrendingUp, Zap, Award, Navigation } from 'lucide-react';
 
 export default function MasterCabinetView() {
@@ -8,6 +11,13 @@ export default function MasterCabinetView() {
   const master = masters[0]; // ИП Ковалёв
   const [animatingDebt, setAnimatingDebt] = useState(false);
   const [displayDebt, setDisplayDebt] = useState(barterState.debtAmount);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(incomingOrders[0]?.id ?? null);
+  const selectedOrder = incomingOrders.find(order => order.id === selectedOrderId) ?? incomingOrders[0];
+  const orderIcon = (income: number, selected: boolean, accepted: boolean) => L.divIcon({
+    className: 'master-order-pin-wrap',
+    html: `<div class="master-order-pin ${selected ? 'selected' : ''} ${accepted ? 'accepted' : ''}"><span>${accepted ? '✓' : '+'}${income} BYN</span></div>`,
+    iconSize: [106, 42], iconAnchor: [53, 42],
+  });
 
   useEffect(() => {
     if (barterState.isSettled && animatingDebt) {
@@ -106,14 +116,21 @@ export default function MasterCabinetView() {
         </div>
       </div>
 
+      <section className="master-map-section" aria-labelledby="master-map-title">
+        <div className="master-map-heading"><div><p className="section-kicker">ЗАКАЗЫ РЯДОМ</p><h3 id="master-map-title">Выберите заказ на карте</h3><p>Нажмите на метку, чтобы посмотреть работу, доход и детали маршрута.</p></div><span>{incomingOrders.filter(order => !order.accepted).length} доступно</span></div>
+        <div className="master-map-canvas"><MapContainer center={[53.914, 27.607]} zoom={11} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}><TileLayer attribution={mapTiles.attribution} url={mapTiles.url} /><Polyline positions={[master.commuteFromCoords, master.commuteToCoords]} pathOptions={{ color: '#2a1b48', weight: 4, dashArray: '8, 8', opacity: 0.72 }} />{incomingOrders.map(order => <Marker key={order.id} position={order.coordinates} icon={orderIcon(order.income, selectedOrder?.id === order.id, order.accepted)} eventHandlers={{ click: () => setSelectedOrderId(order.id) }}><Tooltip direction="top" offset={[0, -35]}>{order.district} · {order.tasks}</Tooltip></Marker>)}</MapContainer><div className="master-map-legend"><span className="route-key" /> Ваш маршрут <span className="income-key" /> Доход за заказ</div></div>
+      </section>
+
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
         {/* Incoming Orders (3 cols) */}
         <div className="lg:col-span-3 space-y-4">
           <h3 className="text-sm font-bold text-[#2A1B48] flex items-center gap-2">
-            <MapPin size={16} /> Входящие попутные заказы
+            <MapPin size={16} /> Заявка с карты
           </h3>
 
-          {incomingOrders.map(order => (
+          <div className="master-order-tabs" aria-label="Доступные заказы">{incomingOrders.map(order => <button type="button" key={order.id} className={selectedOrder?.id === order.id ? 'active' : ''} onClick={() => setSelectedOrderId(order.id)}>{order.district} <strong>+{order.income} BYN</strong></button>)}</div>
+
+          {selectedOrder && [selectedOrder].map(order => (
             <div
               key={order.id}
               className={`bg-white rounded-2xl p-5 shadow-sm border transition-all duration-300 ${
@@ -152,13 +169,6 @@ export default function MasterCabinetView() {
                   <Clock size={14} className="text-gray-400 shrink-0 mt-0.5" />
                   <p className="text-gray-600">{order.duration}</p>
                 </div>
-              </div>
-
-              {/* Consumables pickup */}
-              <div className="mt-3 p-3 bg-[#E56E3E]/5 rounded-xl border border-[#E56E3E]/10">
-                <p className="text-xs text-gray-700">
-                  🏪 <strong className="text-[#E56E3E]">Пикап ОМА КСТАТИ:</strong> {order.consumablesPickup}
-                </p>
               </div>
 
               {order.clusterDetails && (

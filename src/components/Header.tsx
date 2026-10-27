@@ -1,16 +1,17 @@
 import { useApp } from '../context/AppContext';
 import { TabId } from '../types';
-import { ShoppingCart, MapPinned, HardHat, ChartNoAxesCombined, Zap, MapPin, Phone, ArrowUpRight, Menu } from 'lucide-react';
+import { ShoppingCart, MapPinned, HardHat, ChartNoAxesCombined, Wrench, MapPin, Phone, ArrowUpRight, Menu } from 'lucide-react';
 
 const tabs: { id: TabId; label: string; shortLabel: string; icon: React.ReactNode }[] = [
-  { id: 'customer', label: 'Покупателю', shortLabel: 'Покупка', icon: <ShoppingCart size={18} /> },
+  { id: 'customer', label: 'Корзина', shortLabel: 'Корзина', icon: <ShoppingCart size={18} /> },
+  { id: 'service', label: 'Вызов мастера', shortLabel: 'Вызов', icon: <Wrench size={18} /> },
   { id: 'dispatcher', label: 'Гео-диспетчер', shortLabel: 'Карта', icon: <MapPinned size={18} /> },
-  { id: 'master', label: 'Кабинет мастера', shortLabel: 'Мастер', icon: <HardHat size={18} /> },
+  { id: 'master', label: 'Кабинет мастера', shortLabel: 'Кабинет', icon: <HardHat size={18} /> },
   { id: 'economics', label: 'Экономика проекта', shortLabel: 'Экономика', icon: <ChartNoAxesCombined size={18} /> },
 ];
 
 export default function Header() {
-  const { activeTab, setActiveTab, simulateNewOrder, orders } = useApp();
+  const { activeTab, setActiveTab, serviceRequests } = useApp();
 
   return (
     <header className="site-header">
@@ -29,8 +30,8 @@ export default function Header() {
           </button>
           <div className="header-message"><span className="header-message-dot" /> Платформа попутного бытового сервиса <strong>для дома и ремонта</strong></div>
           <div className="header-actions">
-            {orders.length > 0 && <span className="live-orders"><span /> {orders.length} {orders.length === 1 ? 'заявка' : orders.length < 5 ? 'заявки' : 'заявок'}</span>}
-            <button className="simulate-button" onClick={simulateNewOrder}><Zap size={17} fill="currentColor" /><span>Новая заявка</span><span className="simulate-long"> в Минск-Мире</span></button>
+            {serviceRequests.length > 0 && <span className="live-orders"><span /> {serviceRequests.length} {serviceRequests.length === 1 ? 'заявка' : serviceRequests.length < 5 ? 'заявки' : 'заявок'}</span>}
+            <button className="simulate-button" onClick={() => setActiveTab('service')}><Wrench size={17} /><span>Вызвать мастера</span></button>
           </div>
         </div>
       </div>

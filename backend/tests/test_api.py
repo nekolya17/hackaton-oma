@@ -14,7 +14,6 @@ def test_all_products_are_purchased_but_only_selected_products_are_installed(tmp
         response = client.post("/api/v1/quotes", json={
             "product_ids": ["faucet", "chandelier", "curtainrod", "greenhouse"],
             "installation_product_ids": ["faucet", "chandelier"],
-            "consumable_ids_by_product": {"faucet": ["faucet-fasteners", "faucet-sealant"]},
             "slot_id": "cluster",
             "use_bonus": True,
         })
@@ -23,9 +22,10 @@ def test_all_products_are_purchased_but_only_selected_products_are_installed(tmp
     assert quote["products_price"] == 1280
     assert [item["product_id"] for item in quote["items"]] == ["faucet", "chandelier"]
     assert quote["installation_price"] == 44.57
-    assert quote["consumables_price"] == 4.90
+    assert "consumables_price" not in quote
+    assert all("consumables" not in item for item in quote["items"])
     assert quote["bonus_discount"] == 7
-    assert quote["total_price"] == 1322.47
+    assert quote["total_price"] == 1317.57
 
 
 def test_goods_only_order_is_saved_without_master(tmp_path: Path) -> None:
@@ -49,18 +49,33 @@ def test_goods_only_order_is_saved_without_master(tmp_path: Path) -> None:
         assert [item["id"] for item in client.get("/api/v1/orders").json()] == [order["id"]]
 
 
-def test_rejects_installation_outside_cart_and_unknown_consumables(tmp_path: Path) -> None:
+def test_installation_order_waits_for_master(tmp_path: Path) -> None:
+    with client_for(tmp_path) as client:
+        response = client.post("/api/v1/orders", json={
+            "product_ids": ["faucet"],
+            "installation_product_ids": ["faucet"],
+            "slot_id": "commute",
+            "address": "Минск, ул. Примерная, 1",
+            "district": "Минск",
+            "coordinates": [53.9, 27.56],
+        })
+    assert response.status_code == 201
+    assert response.json()["status"] == "pending"
+    assert response.json()["assigned_master_id"] is None
+
+
+def test_rejects_installation_outside_cart_and_removed_consumables_field(tmp_path: Path) -> None:
     with client_for(tmp_path) as client:
         outside_cart = client.post("/api/v1/quotes", json={
             "product_ids": ["faucet"],
             "installation_product_ids": ["chandelier"],
             "slot_id": "commute",
         })
-        unknown_consumable = client.post("/api/v1/quotes", json={
+        old_consumables_field = client.post("/api/v1/quotes", json={
             "product_ids": ["faucet"],
             "installation_product_ids": ["faucet"],
             "consumable_ids_by_product": {"faucet": ["chandelier-terminals"]},
             "slot_id": "commute",
         })
     assert outside_cart.status_code == 422
-    assert unknown_consumable.status_code == 422
+    assert old_consumables_field.status_code == 422

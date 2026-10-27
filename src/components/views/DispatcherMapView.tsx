@@ -4,7 +4,7 @@ import L from 'leaflet';
 import { useApp } from '../../context/AppContext';
 import { storeLocations, hexCells, masters, matchingRoute, specializations } from '../../data/mockData';
 import { mapTiles } from '../../config/mapTiles';
-import { Brain, Filter, Activity, TrendingDown, ShoppingCart, Clock, Truck, MapPin } from 'lucide-react';
+import { Brain, Filter, Activity, TrendingDown, ShoppingCart, Truck, MapPin } from 'lucide-react';
 
 // Custom icon factories using divIcon to avoid Leaflet asset path issues
 function createIcon(emoji: string, bgColor: string, size: number = 32) {
@@ -53,7 +53,6 @@ const hypermarketIcon = createIcon('🏬', '#2A1B48', 36);
 const kstatiIcon = createIcon('🏪', '#E56E3E', 32);
 const masterIcon = createIcon('🚗', '#241B38', 34);
 const orderIcon = createPulsingIcon('📍');
-const pitstopIcon = createIcon('⚡', '#E56E3E', 28);
 const clientIcon = createIcon('🏠', '#F49B36', 28);
 const startIcon = createIcon('🏗️', '#3E285F', 28);
 const homeIcon = createIcon('🏡', '#22c55e', 28);
@@ -99,14 +98,13 @@ export default function DispatcherMapView() {
   };
 
   const routePoints: [number, number][] = matchingRoute.points.map(p => p.coords);
-  const routeIcons: Record<string, L.DivIcon> = { start: startIcon, pitstop: pitstopIcon, client: clientIcon, home: homeIcon };
+  const routeIcons: Record<string, L.DivIcon> = { start: startIcon, client: clientIcon, home: homeIcon };
 
   const metrics = {
     idleKm: 0.4,
     idleKmBefore: 14.0,
     clientSaving: 60.0,
     stmUpsell: 14.5,
-    pitstopTime: 60,
   };
 
   return (
@@ -202,7 +200,6 @@ export default function DispatcherMapView() {
                     <p className="font-bold text-sm">📍 {o.address}</p>
                     <p className="text-xs text-gray-600">{o.items?.length ? o.items.map(item => item.product.name).join(', ') : o.product.name}</p>
                     <p className="text-xs font-bold text-[#F49B36]">Установка: {o.items?.length ? o.items.reduce((sum, item) => sum + item.installationPrice, 0).toFixed(2) : o.slot.price} BYN</p>
-                    <p className="text-[10px] text-gray-400">Расходники: {o.items?.length ? (o.items.flatMap(item => item.consumables.map(consumable => consumable.name)).join(', ') || 'не выбраны') : o.product.consumables}</p>
                   </div>
                 </Popup>
               </Marker>
@@ -324,11 +321,6 @@ export default function DispatcherMapView() {
                   <p className="text-lg font-black text-[#2A1B48]">+{metrics.stmUpsell} BYN</p>
                   <p className="text-[10px] text-gray-500">Допродажа СТМ ОМА</p>
                 </div>
-                <div className="bg-amber-50 rounded-xl p-3 border border-amber-100">
-                  <Clock size={14} className="text-amber-500 mb-1" />
-                  <p className="text-lg font-black text-amber-600">{metrics.pitstopTime} сек</p>
-                  <p className="text-[10px] text-gray-500">Пит-стоп ОМА КСТАТИ</p>
-                </div>
               </div>
 
               {/* Route breakdown */}
@@ -340,7 +332,6 @@ export default function DispatcherMapView() {
                       <div className="flex flex-col items-center">
                         <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white ${
                           p.type === 'start' ? 'bg-[#3E285F]' :
-                          p.type === 'pitstop' ? 'bg-[#E56E3E]' :
                           p.type === 'client' ? 'bg-[#F49B36]' : 'bg-emerald-500'
                         }`}>
                           {String.fromCharCode(1040 + i)}
