@@ -1,5 +1,11 @@
 export type TabId = 'customer' | 'dispatcher' | 'master' | 'economics';
 
+export interface Consumable {
+  id: string;
+  name: string;
+  price: number;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -8,8 +14,10 @@ export interface Product {
   marketPrice: number;
   consumables: string;
   consumablesPrice: number;
+  consumablesOptions: Consumable[];
   category: string;
   icon: string;
+  imageUrl?: string;
 }
 
 export interface TimeSlot {
@@ -24,6 +32,8 @@ export interface TimeSlot {
 export interface Order {
   id: string;
   product: Product;
+  purchasedProducts?: Product[];
+  items?: { product: Product; installationPrice: number; consumables: Consumable[] }[];
   slot: TimeSlot;
   address: string;
   district: string;

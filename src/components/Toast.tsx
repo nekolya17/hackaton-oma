@@ -8,13 +8,13 @@ export default function ToastContainer() {
 
   const icons = {
     success: <CheckCircle size={18} className="text-emerald-500 shrink-0" />,
-    info: <Info size={18} className="text-[#00B4D8] shrink-0" />,
+    info: <Info size={18} className="text-[#F49B36] shrink-0" />,
     warning: <AlertTriangle size={18} className="text-amber-500 shrink-0" />,
   };
 
   const bgColors = {
     success: 'bg-emerald-50 border-emerald-200',
-    info: 'bg-blue-50 border-[#00B4D8]/20',
+    info: 'bg-blue-50 border-[#F49B36]/20',
     warning: 'bg-amber-50 border-amber-200',
   };
 

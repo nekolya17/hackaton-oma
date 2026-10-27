@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Polygon, Polyline, Marker, Popup, useMap } fro
 import L from 'leaflet';
 import { useApp } from '../../context/AppContext';
 import { storeLocations, hexCells, masters, matchingRoute, specializations } from '../../data/mockData';
+import { mapTiles } from '../../config/mapTiles';
 import { Brain, Filter, Activity, TrendingDown, ShoppingCart, Clock, Truck, MapPin } from 'lucide-react';
 
 // Custom icon factories using divIcon to avoid Leaflet asset path issues
@@ -35,7 +36,7 @@ function createPulsingIcon(emoji: string) {
       "></div>
       <div style="
         position:absolute;inset:4px;
-        background:#00B4D8;
+        background:#F49B36;
         border-radius:50%;
         display:flex;align-items:center;justify-content:center;
         font-size:14px;
@@ -48,13 +49,13 @@ function createPulsingIcon(emoji: string) {
   });
 }
 
-const hypermarketIcon = createIcon('🏬', '#2B0B73', 36);
-const kstatiIcon = createIcon('🏪', '#F04E37', 32);
-const masterIcon = createIcon('🚗', '#18181B', 34);
+const hypermarketIcon = createIcon('🏬', '#2A1B48', 36);
+const kstatiIcon = createIcon('🏪', '#E56E3E', 32);
+const masterIcon = createIcon('🚗', '#241B38', 34);
 const orderIcon = createPulsingIcon('📍');
-const pitstopIcon = createIcon('⚡', '#F04E37', 28);
-const clientIcon = createIcon('🏠', '#00B4D8', 28);
-const startIcon = createIcon('🏗️', '#3B108C', 28);
+const pitstopIcon = createIcon('⚡', '#E56E3E', 28);
+const clientIcon = createIcon('🏠', '#F49B36', 28);
+const startIcon = createIcon('🏗️', '#3E285F', 28);
 const homeIcon = createIcon('🏡', '#22c55e', 28);
 
 // Route animation component
@@ -73,7 +74,7 @@ function AnimatedRoute({ points, show }: { points: [number, number][]; show: boo
     <Polyline
       positions={points}
       pathOptions={{
-        color: '#2B0B73',
+        color: '#2A1B48',
         weight: 4,
         dashArray: '12, 8',
         opacity: 0.9,
@@ -92,9 +93,9 @@ export default function DispatcherMapView() {
   }, [selectedSpec]);
 
   const hexColors = {
-    low: { fill: '#00B4D8', opacity: 0.15, border: '#00B4D8' },
-    medium: { fill: '#F04E37', opacity: 0.2, border: '#F04E37' },
-    high: { fill: '#3B108C', opacity: 0.25, border: '#3B108C' },
+    low: { fill: '#F49B36', opacity: 0.15, border: '#F49B36' },
+    medium: { fill: '#E56E3E', opacity: 0.2, border: '#E56E3E' },
+    high: { fill: '#3E285F', opacity: 0.25, border: '#3E285F' },
   };
 
   const routePoints: [number, number][] = matchingRoute.points.map(p => p.coords);
@@ -109,20 +110,17 @@ export default function DispatcherMapView() {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto p-4">
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-4" style={{ height: 'calc(100vh - 160px)' }}>
+    <div className="view-content dispatcher-content max-w-[1600px] mx-auto p-4">
+      <div className="dispatcher-layout grid grid-cols-1 xl:grid-cols-4 gap-4">
         {/* Map (3 cols) */}
-        <div className="xl:col-span-3 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative">
+        <div className="dispatcher-map xl:col-span-3 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative">
           <MapContainer
             center={[53.9045, 27.5615]}
             zoom={11}
             scrollWheelZoom={true}
             style={{ height: '100%', width: '100%' }}
           >
-            <TileLayer
-              attribution='&copy; <a href="https://carto.com">CARTO</a>'
-              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-            />
+            <TileLayer attribution={mapTiles.attribution} url={mapTiles.url} />
 
             {/* H3 Hexagons */}
             {hexCells.map(hex => {
@@ -164,7 +162,7 @@ export default function DispatcherMapView() {
                     <p className="font-bold text-sm">{store.name}</p>
                     <p className="text-xs text-gray-500">{store.address}</p>
                     <span className={`inline-block mt-1 px-2 py-0.5 text-[10px] font-bold rounded-full text-white ${
-                      store.type === 'hypermarket' ? 'bg-[#2B0B73]' : 'bg-[#F04E37]'
+                      store.type === 'hypermarket' ? 'bg-[#2A1B48]' : 'bg-[#E56E3E]'
                     }`}>
                       {store.type === 'hypermarket' ? 'Гипермаркет' : 'ОМА КСТАТИ'}
                     </span>
@@ -192,19 +190,19 @@ export default function DispatcherMapView() {
               <Polyline
                 key={`route-${m.id}`}
                 positions={[m.commuteFromCoords, m.commuteToCoords]}
-                pathOptions={{ color: '#FACC15', weight: 2, dashArray: '8, 6', opacity: 0.6 }}
+                pathOptions={{ color: '#F5AA45', weight: 2, dashArray: '8, 6', opacity: 0.6 }}
               />
             ))}
 
             {/* Dynamic orders */}
-            {orders.map(o => (
+            {orders.filter(o => !o.purchasedProducts || (o.items?.length ?? 0) > 0).map(o => (
               <Marker key={o.id} position={o.coordinates} icon={orderIcon}>
                 <Popup>
                   <div>
                     <p className="font-bold text-sm">📍 {o.address}</p>
-                    <p className="text-xs text-gray-600">{o.product.name}</p>
-                    <p className="text-xs font-bold text-[#00B4D8]">{o.slot.price} BYN</p>
-                    <p className="text-[10px] text-gray-400">СТМ: {o.product.consumables}</p>
+                    <p className="text-xs text-gray-600">{o.items?.length ? o.items.map(item => item.product.name).join(', ') : o.product.name}</p>
+                    <p className="text-xs font-bold text-[#F49B36]">Установка: {o.items?.length ? o.items.reduce((sum, item) => sum + item.installationPrice, 0).toFixed(2) : o.slot.price} BYN</p>
+                    <p className="text-[10px] text-gray-400">Расходники: {o.items?.length ? (o.items.flatMap(item => item.consumables.map(consumable => consumable.name)).join(', ') || 'не выбраны') : o.product.consumables}</p>
                   </div>
                 </Popup>
               </Marker>
@@ -228,20 +226,20 @@ export default function DispatcherMapView() {
           {/* Map legend overlay */}
           <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg z-[1000] text-xs space-y-1">
             <p className="font-bold text-gray-700 mb-1">Легенда</p>
-            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#2B0B73]" /> Гипермаркет ОМА</div>
-            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#F04E37]" /> ОМА КСТАТИ</div>
-            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#18181B]" /> Мастер ОМА PRO</div>
-            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#00B4D8]" /> Заявка B2C</div>
+            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#2A1B48]" /> Гипермаркет ОМА</div>
+            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#E56E3E]" /> ОМА КСТАТИ</div>
+            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#241B38]" /> Мастер ОМА PRO</div>
+            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#F49B36]" /> Заявка B2C</div>
           </div>
         </div>
 
         {/* Control Panel (1 col) */}
-        <div className="space-y-4 overflow-y-auto">
+        <div className="dispatcher-panel space-y-4 overflow-y-auto">
           {/* Specialization Filter */}
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
             <div className="flex items-center gap-2 mb-3">
-              <Filter size={16} className="text-[#2B0B73]" />
-              <h3 className="text-sm font-bold text-[#2B0B73]">Фильтр по специализации</h3>
+              <Filter size={16} className="text-[#2A1B48]" />
+              <h3 className="text-sm font-bold text-[#2A1B48]">Фильтр по специализации</h3>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {specializations.map(s => (
@@ -250,7 +248,7 @@ export default function DispatcherMapView() {
                   onClick={() => setSelectedSpec(s)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                     selectedSpec === s
-                      ? 'bg-[#2B0B73] text-white shadow-md'
+                      ? 'bg-[#2A1B48] text-white shadow-md'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
@@ -263,13 +261,13 @@ export default function DispatcherMapView() {
           {/* Master info */}
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
             <div className="flex items-center gap-2 mb-3">
-              <Truck size={16} className="text-[#FACC15]" />
+              <Truck size={16} className="text-[#F5AA45]" />
               <h3 className="text-sm font-bold text-gray-800">Мастер на маршруте</h3>
             </div>
-            <div className="p-3 bg-[#18181B] rounded-xl text-white">
+            <div className="p-3 bg-[#241B38] rounded-xl text-white">
               <p className="text-sm font-bold">👷 ИП Ковалёв А.В.</p>
               <p className="text-xs text-gray-400 mt-0.5">Сантехника PRO • 4.95⭐</p>
-              <p className="text-xs text-[#FACC15] mt-1">🛣️ БЦ «Титан» → Уручье (17:30)</p>
+              <p className="text-xs text-[#F5AA45] mt-1">🛣️ БЦ «Титан» → Уручье (17:30)</p>
             </div>
           </div>
 
@@ -279,10 +277,10 @@ export default function DispatcherMapView() {
             disabled={algorithmRunning}
             className={`w-full py-4 rounded-2xl font-bold text-sm transition-all duration-300 cursor-pointer ${
               algorithmRunning
-                ? 'bg-[#2B0B73]/60 text-white/80 animate-pulse'
+                ? 'bg-[#2A1B48]/60 text-white/80 animate-pulse'
                 : algorithmMatched
                   ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
-                  : 'bg-gradient-to-r from-[#2B0B73] to-[#3B108C] text-white hover:shadow-xl hover:shadow-[#2B0B73]/30 hover:scale-[1.01]'
+                  : 'bg-gradient-to-r from-[#2A1B48] to-[#3E285F] text-white hover:shadow-xl hover:shadow-[#2A1B48]/30 hover:scale-[1.01]'
             }`}
           >
             {algorithmRunning ? (
@@ -306,7 +304,7 @@ export default function DispatcherMapView() {
           {/* Telemetry */}
           {algorithmMatched && (
             <div className="space-y-3 animate-[fadeIn_0.5s_ease-out]">
-              <h3 className="text-sm font-bold text-[#2B0B73] flex items-center gap-2">
+              <h3 className="text-sm font-bold text-[#2A1B48] flex items-center gap-2">
                 <Activity size={16} /> Телеметрия алгоритма
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -317,13 +315,13 @@ export default function DispatcherMapView() {
                   <p className="text-[10px] text-emerald-500">вместо {metrics.idleKmBefore} км (-97%)</p>
                 </div>
                 <div className="bg-blue-50 rounded-xl p-3 border border-blue-100">
-                  <MapPin size={14} className="text-[#00B4D8] mb-1" />
-                  <p className="text-lg font-black text-[#00B4D8]">{metrics.clientSaving} BYN</p>
+                  <MapPin size={14} className="text-[#F49B36] mb-1" />
+                  <p className="text-lg font-black text-[#F49B36]">{metrics.clientSaving} BYN</p>
                   <p className="text-[10px] text-gray-500">Экономия клиента</p>
                 </div>
-                <div className="bg-[#F2F4FF] rounded-xl p-3 border border-[#E8ECFF]">
-                  <ShoppingCart size={14} className="text-[#2B0B73] mb-1" />
-                  <p className="text-lg font-black text-[#2B0B73]">+{metrics.stmUpsell} BYN</p>
+                <div className="bg-[#FAF8F5] rounded-xl p-3 border border-[#F1EEE9]">
+                  <ShoppingCart size={14} className="text-[#2A1B48] mb-1" />
+                  <p className="text-lg font-black text-[#2A1B48]">+{metrics.stmUpsell} BYN</p>
                   <p className="text-[10px] text-gray-500">Допродажа СТМ ОМА</p>
                 </div>
                 <div className="bg-amber-50 rounded-xl p-3 border border-amber-100">
@@ -341,9 +339,9 @@ export default function DispatcherMapView() {
                     <div key={i} className="flex items-start gap-2">
                       <div className="flex flex-col items-center">
                         <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white ${
-                          p.type === 'start' ? 'bg-[#3B108C]' :
-                          p.type === 'pitstop' ? 'bg-[#F04E37]' :
-                          p.type === 'client' ? 'bg-[#00B4D8]' : 'bg-emerald-500'
+                          p.type === 'start' ? 'bg-[#3E285F]' :
+                          p.type === 'pitstop' ? 'bg-[#E56E3E]' :
+                          p.type === 'client' ? 'bg-[#F49B36]' : 'bg-emerald-500'
                         }`}>
                           {String.fromCharCode(1040 + i)}
                         </div>

@@ -11,17 +11,17 @@ export default function UnitEconomicsView() {
   const barterVolume = monthlyGMV * 0.45;
 
   const cjmSteps = [
-    { step: 1, title: 'Покупка / Потребность', icon: <ShoppingBag size={20} />, color: '#2B0B73', desc: 'Покупка товара в ОМА / oma.by + выбор опции «Установить по пути»' },
-    { step: 2, title: 'H3 Гео-Матчинг', icon: <Target size={20} />, color: '#00B4D8', desc: 'Алгоритм находит мастера ОМА PRO, чей маршрут проходит в пределах 500 м от клиента' },
-    { step: 3, title: 'Микро-пикап ОМА КСТАТИ', icon: <Building2 size={20} />, color: '#F04E37', desc: 'Мастер за 60 сек забирает готовый пакет СТМ расходников у дома клиента' },
+    { step: 1, title: 'Покупка / Потребность', icon: <ShoppingBag size={20} />, color: '#2A1B48', desc: 'Покупка товара в ОМА / oma.by + выбор опции «Установить по пути»' },
+    { step: 2, title: 'H3 Гео-Матчинг', icon: <Target size={20} />, color: '#F49B36', desc: 'Алгоритм находит мастера ОМА PRO, чей маршрут проходит в пределах 500 м от клиента' },
+    { step: 3, title: 'Микро-пикап ОМА КСТАТИ', icon: <Building2 size={20} />, color: '#E56E3E', desc: 'Мастер за 60 сек забирает готовый пакет СТМ расходников у дома клиента' },
     { step: 4, title: 'Установка + Гарантия', icon: <CheckCircle size={20} />, color: '#22c55e', desc: '30 мин работы, электронный чек в приложении, списание бонусов БАЛАНС' },
-    { step: 5, title: 'Регулярное ТО (180 дней)', icon: <Repeat size={20} />, color: '#FACC15', desc: 'Push-напоминание о замене фильтров, сгорании бонусов → повторный вызов «по пути»' },
+    { step: 5, title: 'Регулярное ТО (180 дней)', icon: <Repeat size={20} />, color: '#F5AA45', desc: 'Push-напоминание о замене фильтров, сгорании бонусов → повторный вызов «по пути»' },
   ];
 
   const [activeCjm, setActiveCjm] = useState(0);
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 space-y-6">
+    <div className="view-content economics-content max-w-[1400px] mx-auto p-4 space-y-6">
       {/* Market Insight */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-red-100 relative overflow-hidden">
@@ -66,15 +66,15 @@ export default function UnitEconomicsView() {
       {/* ROI Calculator */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div className="flex items-center gap-2 mb-5">
-          <BarChart3 size={20} className="text-[#2B0B73]" />
-          <h3 className="text-lg font-extrabold text-[#2B0B73]" style={{ fontFamily: 'Manrope' }}>Интерактивный калькулятор ROI для ОМА</h3>
+          <BarChart3 size={20} className="text-[#2A1B48]" />
+          <h3 className="text-lg font-extrabold text-[#2A1B48]" style={{ fontFamily: 'Manrope' }}>Интерактивный калькулятор ROI для ОМА</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
             <label className="text-sm font-semibold text-gray-700 flex items-center justify-between">
               <span>Количество заказов в день</span>
-              <span className="text-lg font-black text-[#2B0B73]">{ordersPerDay}</span>
+              <span className="text-lg font-black text-[#2A1B48]">{ordersPerDay}</span>
             </label>
             <input
               type="range"
@@ -83,7 +83,7 @@ export default function UnitEconomicsView() {
               step={10}
               value={ordersPerDay}
               onChange={e => setOrdersPerDay(Number(e.target.value))}
-              className="w-full mt-2 accent-[#2B0B73] h-2"
+              className="w-full mt-2 accent-[#2A1B48] h-2"
             />
             <div className="flex justify-between text-[10px] text-gray-400 mt-0.5">
               <span>50 (запуск)</span>
@@ -94,7 +94,7 @@ export default function UnitEconomicsView() {
           <div>
             <label className="text-sm font-semibold text-gray-700 flex items-center justify-between">
               <span>Средний чек допродажи СТМ (Wunder/Fix Haus)</span>
-              <span className="text-lg font-black text-[#2B0B73]">{avgStmCheck.toFixed(1)} BYN</span>
+              <span className="text-lg font-black text-[#2A1B48]">{avgStmCheck.toFixed(1)} BYN</span>
             </label>
             <input
               type="range"
@@ -103,7 +103,7 @@ export default function UnitEconomicsView() {
               step={0.5}
               value={avgStmCheck}
               onChange={e => setAvgStmCheck(Number(e.target.value))}
-              className="w-full mt-2 accent-[#00B4D8] h-2"
+              className="w-full mt-2 accent-[#F49B36] h-2"
             />
             <div className="flex justify-between text-[10px] text-gray-400 mt-0.5">
               <span>5 BYN</span>
@@ -113,24 +113,24 @@ export default function UnitEconomicsView() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="bg-gradient-to-br from-[#2B0B73] to-[#3B108C] rounded-xl p-4 text-white">
+          <div className="bg-gradient-to-br from-[#2A1B48] to-[#3E285F] rounded-xl p-4 text-white">
             <TrendingUp size={16} className="text-white/60 mb-1" />
             <p className="text-2xl font-black">{(monthlyGMV / 1000).toFixed(0)}K</p>
             <p className="text-[10px] text-white/70 mt-0.5">Месячный GMV услуг (BYN)</p>
           </div>
-          <div className="bg-gradient-to-br from-[#00B4D8] to-[#00A8C6] rounded-xl p-4 text-white">
+          <div className="bg-gradient-to-br from-[#F49B36] to-[#E37D28] rounded-xl p-4 text-white">
             <Layers size={16} className="text-white/60 mb-1" />
             <p className="text-2xl font-black">{(omaCommission / 1000).toFixed(0)}K</p>
             <p className="text-[10px] text-white/70 mt-0.5">Комиссия ОМА 18% (BYN)</p>
           </div>
-          <div className="bg-gradient-to-br from-[#F04E37] to-[#e63e27] rounded-xl p-4 text-white">
+          <div className="bg-gradient-to-br from-[#E56E3E] to-[#e63e27] rounded-xl p-4 text-white">
             <ShoppingBag size={16} className="text-white/60 mb-1" />
             <p className="text-2xl font-black">{(stmRevenue / 1000).toFixed(0)}K</p>
             <p className="text-[10px] text-white/70 mt-0.5">Доп. выручка СТМ (BYN)</p>
           </div>
-          <div className="bg-gradient-to-br from-[#18181B] to-[#27272A] rounded-xl p-4 text-white">
-            <Users size={16} className="text-[#FACC15]/60 mb-1" />
-            <p className="text-2xl font-black text-[#FACC15]">{(barterVolume / 1000).toFixed(0)}K</p>
+          <div className="bg-gradient-to-br from-[#241B38] to-[#352747] rounded-xl p-4 text-white">
+            <Users size={16} className="text-[#F5AA45]/60 mb-1" />
+            <p className="text-2xl font-black text-[#F5AA45]">{(barterVolume / 1000).toFixed(0)}K</p>
             <p className="text-[10px] text-gray-400 mt-0.5">B2B взаимозачёт (BYN)</p>
           </div>
         </div>
@@ -138,12 +138,12 @@ export default function UnitEconomicsView() {
 
       {/* CJM */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h3 className="text-lg font-extrabold text-[#2B0B73] mb-5" style={{ fontFamily: 'Manrope' }}>
+        <h3 className="text-lg font-extrabold text-[#2A1B48] mb-5" style={{ fontFamily: 'Manrope' }}>
           Customer Journey Map (CJM) — «ОМА ПО ПУТИ»
         </h3>
 
         {/* Timeline */}
-        <div className="flex items-start justify-between mb-6 relative">
+        <div className="cjm-timeline flex items-start justify-between mb-6 relative">
           <div className="absolute top-5 left-0 right-0 h-0.5 bg-gray-200 z-0" />
           {cjmSteps.map((s, i) => (
             <button

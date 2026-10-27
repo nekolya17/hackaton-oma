@@ -40,13 +40,13 @@ export default function MasterCabinetView() {
   ];
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 space-y-5">
+    <div className="view-content master-content max-w-[1400px] mx-auto p-4 space-y-5">
       {/* Master Profile Header */}
-      <div className="bg-gradient-to-r from-[#18181B] to-[#27272A] rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#FACC15]/5 rounded-bl-full" />
+      <div className="bg-gradient-to-r from-[#241B38] to-[#352747] rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#F5AA45]/5 rounded-bl-full" />
         <div className="relative flex flex-col lg:flex-row lg:items-center gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-[#FACC15] to-[#F59E0B] rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-[#FACC15]/20">
+            <div className="w-16 h-16 bg-gradient-to-br from-[#F5AA45] to-[#F59E0B] rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-[#F5AA45]/20">
               {master.avatar}
             </div>
             <div>
@@ -63,19 +63,19 @@ export default function MasterCabinetView() {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} size={14} fill="#FACC15" className="text-[#FACC15]" />
+                <Star key={i} size={14} fill="#F5AA45" className="text-[#F5AA45]" />
               ))}
             </div>
-            <span className="text-lg font-bold text-[#FACC15]">{master.rating}</span>
+            <span className="text-lg font-bold text-[#F5AA45]">{master.rating}</span>
           </div>
         </div>
 
         {/* Auto-Scoring Badge */}
         <div className="mt-4 p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
           <div className="flex items-start gap-3">
-            <Award size={20} className="text-[#FACC15] shrink-0 mt-0.5" />
+            <Award size={20} className="text-[#F5AA45] shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-bold text-[#FACC15]">Авто-скоринг компетенций по чекам ОМА PRO</p>
+              <p className="text-sm font-bold text-[#F5AA45]">Авто-скоринг компетенций по чекам ОМА PRO</p>
               <p className="text-xs text-gray-400 mt-1">
                 {master.purchaseStats} → <span className="text-white font-semibold">Допуск: {master.competenceLevel}</span>
               </p>
@@ -90,12 +90,12 @@ export default function MasterCabinetView() {
       {/* Commute Route Bar */}
       <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
         <div className="flex items-center gap-3">
-          <Navigation size={18} className="text-[#2B0B73]" />
+          <Navigation size={18} className="text-[#2A1B48]" />
           <div className="flex-1">
             <p className="text-xs text-gray-500">Ваш маршрут домой</p>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-sm font-bold text-gray-800">{master.commuteFrom}</span>
-              <ArrowRight size={14} className="text-[#00B4D8]" />
+              <ArrowRight size={14} className="text-[#F49B36]" />
               <span className="text-sm font-bold text-gray-800">{master.commuteTo}</span>
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function MasterCabinetView() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
         {/* Incoming Orders (3 cols) */}
         <div className="lg:col-span-3 space-y-4">
-          <h3 className="text-sm font-bold text-[#2B0B73] flex items-center gap-2">
+          <h3 className="text-sm font-bold text-[#2A1B48] flex items-center gap-2">
             <MapPin size={16} /> Входящие попутные заказы
           </h3>
 
@@ -123,7 +123,7 @@ export default function MasterCabinetView() {
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <span className={`px-2.5 py-1 rounded-lg text-xs font-bold text-white ${
-                    order.type === 'single' ? 'bg-[#00B4D8]' : 'bg-[#F04E37]'
+                    order.type === 'single' ? 'bg-[#F49B36]' : 'bg-[#E56E3E]'
                   }`}>
                     {order.type === 'single' ? '🏠 Одиночный' : '🏘️ Кластер соседей'}
                   </span>
@@ -145,7 +145,7 @@ export default function MasterCabinetView() {
                   <p className="text-amber-600 font-medium">{order.deviation}</p>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Zap size={14} className="text-[#2B0B73] shrink-0 mt-0.5" />
+                  <Zap size={14} className="text-[#2A1B48] shrink-0 mt-0.5" />
                   <p className="text-gray-700"><strong>Задачи:</strong> {order.tasks}</p>
                 </div>
                 <div className="flex items-start gap-2">
@@ -155,15 +155,15 @@ export default function MasterCabinetView() {
               </div>
 
               {/* Consumables pickup */}
-              <div className="mt-3 p-3 bg-[#F04E37]/5 rounded-xl border border-[#F04E37]/10">
+              <div className="mt-3 p-3 bg-[#E56E3E]/5 rounded-xl border border-[#E56E3E]/10">
                 <p className="text-xs text-gray-700">
-                  🏪 <strong className="text-[#F04E37]">Пикап ОМА КСТАТИ:</strong> {order.consumablesPickup}
+                  🏪 <strong className="text-[#E56E3E]">Пикап ОМА КСТАТИ:</strong> {order.consumablesPickup}
                 </p>
               </div>
 
               {order.clusterDetails && (
-                <div className="mt-2 p-3 bg-[#2B0B73]/5 rounded-xl border border-[#2B0B73]/10">
-                  <p className="text-xs text-[#2B0B73]">📋 {order.clusterDetails}</p>
+                <div className="mt-2 p-3 bg-[#2A1B48]/5 rounded-xl border border-[#2A1B48]/10">
+                  <p className="text-xs text-[#2A1B48]">📋 {order.clusterDetails}</p>
                 </div>
               )}
 
@@ -173,7 +173,7 @@ export default function MasterCabinetView() {
                 className={`mt-4 w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 cursor-pointer ${
                   order.accepted
                     ? 'bg-emerald-100 text-emerald-600'
-                    : 'bg-gradient-to-r from-[#2B0B73] to-[#3B108C] text-white hover:shadow-lg hover:scale-[1.01] active:scale-[0.99]'
+                    : 'bg-gradient-to-r from-[#2A1B48] to-[#3E285F] text-white hover:shadow-lg hover:scale-[1.01] active:scale-[0.99]'
                 }`}
               >
                 {order.accepted ? (
@@ -197,7 +197,7 @@ export default function MasterCabinetView() {
                 <div key={i} className="flex-1 flex flex-col items-center gap-1">
                   <span className="text-[10px] font-bold text-emerald-600">{d.amount}</span>
                   <div
-                    className="w-full bg-gradient-to-t from-[#2B0B73] to-[#00B4D8] rounded-t-md transition-all duration-500"
+                    className="w-full bg-gradient-to-t from-[#2A1B48] to-[#F49B36] rounded-t-md transition-all duration-500"
                     style={{ height: `${(d.amount / 100) * 80}px` }}
                   />
                   <span className="text-[10px] text-gray-400">{d.day}</span>
@@ -213,11 +213,11 @@ export default function MasterCabinetView() {
 
         {/* Barter Widget (2 cols) */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-gradient-to-br from-[#18181B] to-[#27272A] rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-[#FACC15]/5 rounded-bl-full" />
+          <div className="bg-gradient-to-br from-[#241B38] to-[#352747] rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-[#F5AA45]/5 rounded-bl-full" />
             <div className="relative">
               <h3 className="text-base font-extrabold mb-4 flex items-center gap-2" style={{ fontFamily: 'Manrope' }}>
-                <RefreshCw size={18} className="text-[#FACC15]" />
+                <RefreshCw size={18} className="text-[#F5AA45]" />
                 Финансовый взаимозачёт ОМА PRO
               </h3>
 
@@ -238,7 +238,7 @@ export default function MasterCabinetView() {
                 {/* Earned display */}
                 <div className="p-4 bg-white/5 rounded-xl border border-white/10">
                   <p className="text-xs text-gray-400">Заработано «по пути» на этой неделе</p>
-                  <p className="text-2xl font-black text-[#FACC15] mt-1">{barterState.earnedAmount.toFixed(2)} BYN</p>
+                  <p className="text-2xl font-black text-[#F5AA45] mt-1">{barterState.earnedAmount.toFixed(2)} BYN</p>
                 </div>
 
                 {/* Barter button */}
@@ -248,7 +248,7 @@ export default function MasterCabinetView() {
                   className={`w-full py-4 rounded-xl font-bold text-sm transition-all duration-300 cursor-pointer ${
                     barterState.isSettled
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-gradient-to-r from-[#FACC15] to-[#F59E0B] text-[#18181B] hover:shadow-xl hover:shadow-[#FACC15]/30 hover:scale-[1.01] active:scale-[0.99]'
+                      : 'bg-gradient-to-r from-[#F5AA45] to-[#F59E0B] text-[#241B38] hover:shadow-xl hover:shadow-[#F5AA45]/30 hover:scale-[1.01] active:scale-[0.99]'
                   }`}
                 >
                   {barterState.isSettled ? (
@@ -270,8 +270,8 @@ export default function MasterCabinetView() {
                       <p>• Итого зачтено: {(barterState.earnedAmount * 1.05).toFixed(2)} BYN</p>
                       <p className="font-bold text-emerald-400">• Новый долг: {barterState.settledDebt.toFixed(2)} BYN</p>
                     </div>
-                    <div className="mt-3 p-2 bg-[#FACC15]/10 rounded-lg">
-                      <p className="text-[10px] text-[#FACC15] font-semibold text-center">
+                    <div className="mt-3 p-2 bg-[#F5AA45]/10 rounded-lg">
+                      <p className="text-[10px] text-[#F5AA45] font-semibold text-center">
                         💰 100% денег остаются внутри экосистемы ОМА!
                       </p>
                       <p className="text-[10px] text-gray-400 text-center mt-0.5">
@@ -287,7 +287,7 @@ export default function MasterCabinetView() {
           {/* Quick stats */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
-              <p className="text-2xl font-black text-[#2B0B73]">47</p>
+              <p className="text-2xl font-black text-[#2A1B48]">47</p>
               <p className="text-[10px] text-gray-500 mt-0.5">заказов «по пути» выполнено</p>
             </div>
             <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
