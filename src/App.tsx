@@ -33,7 +33,17 @@ function AppContent() {
         {activeTab === 'service' && <ServiceView />}
         {activeTab === 'master' && <MasterCabinetView />}
       </main>
-      <footer className="site-footer"><div><strong>ОМА <span>ПО ПУТИ</span></strong><p>Всё для дома. Сервис рядом.</p></div><span>Пилотный проект • Минск • 2026</span></footer>
+      <footer className="site-footer">
+        <div>
+          <div className="footer-brand">
+            <img src="/oma-logo.png" alt="ОМА" className="footer-logo-img" />
+            <span className="footer-brand-divider" aria-hidden="true" />
+            <strong>МАСТЕРА</strong>
+          </div>
+          <p>Всё для дома. Сервис рядом.</p>
+        </div>
+        <span>Пилотный проект • Минск • 2026</span>
+      </footer>
     </div>
   );
 }

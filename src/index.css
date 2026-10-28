@@ -49,15 +49,13 @@ button:disabled { cursor: not-allowed; }
 .header-main { background: radial-gradient(circle at 78% -80%, #503263 0, transparent 37%), linear-gradient(110deg,#211735,#302048 61%,#261b40); color: white; position: relative; overflow: hidden; }
 .header-main::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .25; background: repeating-linear-gradient(122deg, transparent 0 75px, rgba(255,255,255,.035) 76px 77px); }
 .header-main-inner { position: relative; z-index: 1; min-height: 94px; display: flex; align-items: center; gap: 48px; }
-.oma-brand { display: flex; align-items: center; gap: 12px; flex: none; color: white; cursor: pointer; text-align: left; }
-.oma-mark { width: 55px; height: 44px; position: relative; display: flex; align-items: end; gap: 2px; overflow: hidden; }
-.oma-mark i { display: block; background: white; transform: skew(-25deg); border-radius: 11px 1px 0 0; box-shadow: 0 0 16px #fff5; }
-.oma-mark i:nth-child(1) { height: 28px; width: 17px; }
-.oma-mark i:nth-child(2) { height: 39px; width: 18px; }
-.oma-mark i:nth-child(3) { height: 23px; width: 18px; }
-.brand-copy { display: flex; flex-direction: column; line-height: .86; }
-.brand-copy strong { font: 900 39px/1 'Rubik',sans-serif; letter-spacing: -.09em; }
-.brand-copy small { color: #ffab45; font: 800 10px/1.1 'Rubik',sans-serif; letter-spacing: .23em; margin: 4px 0 0 2px; }
+.oma-brand { display: flex; align-items: center; gap: 14px; flex: none; color: white; cursor: pointer; text-align: left; background: transparent; border: none; padding: 0; transition: transform .2s, opacity .2s; }
+.oma-brand:hover { opacity: .95; transform: translateY(-1px); }
+.oma-logo-img { height: 44px; width: auto; object-fit: contain; display: block; filter: drop-shadow(0 2px 8px rgba(0,0,0,.25)); }
+.brand-divider { width: 2px; height: 32px; background: rgba(255,255,255,.24); border-radius: 1px; }
+.brand-copy { display: flex; flex-direction: column; line-height: 1; }
+.brand-copy strong { font: 900 24px/1 'Rubik',sans-serif; letter-spacing: .02em; color: #fff; text-transform: uppercase; }
+.brand-copy small { color: #f5aa45; font: 800 10px/1.2 'Rubik',sans-serif; letter-spacing: .18em; text-transform: uppercase; margin-top: 3px; }
 .header-message { min-height: 46px; flex: 1; display: flex; align-items: center; gap: 9px; border: 1px solid #ffffff2e; background: #ffffff0d; padding: 0 20px; border-radius: 5px; font-size: 13px; color: #d7cedf; }
 .header-message strong { color: #fff; }
 .header-message-dot, .live-orders span { width: 7px; height: 7px; background: #ffae47; border-radius: 50%; flex: none; box-shadow: 0 0 0 4px #ffae4726; }
@@ -205,8 +203,10 @@ button:disabled { cursor: not-allowed; }
 .dispatcher-panel { scrollbar-width: thin; padding-right: 3px; }
 .leaflet-container { border-radius: 12px; }
 .site-footer { width: 100%; background: #211735; color: #f5f0fa; padding: 26px max(28px,calc((100vw - 1424px)/2)); display: flex; justify-content: space-between; align-items: center; gap: 20px; }
-.site-footer strong { font: 900 17px 'Rubik',sans-serif; letter-spacing: -.04em; }
-.site-footer strong span { color: #f5a342; }
+.footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.footer-logo-img { height: 26px; width: auto; object-fit: contain; display: block; }
+.footer-brand-divider { width: 1px; height: 18px; background: rgba(255,255,255,.2); }
+.footer-brand strong { font: 900 17px 'Rubik',sans-serif; letter-spacing: .02em; color: #f5a342; text-transform: uppercase; }
 .site-footer p, .site-footer > span { color: #bcb2c8; font-size: 11px; margin-top: 3px; }
 
 @media (max-width: 1024px) {
@@ -229,13 +229,11 @@ button:disabled { cursor: not-allowed; }
   .header-promo { height: 30px; font-size: 9px; letter-spacing: .08em; }
   .header-utility { display: none; }
   .header-main-inner { min-height: 74px; gap: 8px; }
-  .oma-mark { width: 35px; height: 30px; }
-  .oma-mark i:nth-child(1) { height: 19px; width: 11px; }
-  .oma-mark i:nth-child(2) { height: 27px; width: 11px; }
-  .oma-mark i:nth-child(3) { height: 16px; width: 11px; }
-  .oma-brand { gap: 7px; }
-  .brand-copy strong { font-size: 27px; }
-  .brand-copy small { font-size: 7px; }
+  .oma-brand { gap: 8px; }
+  .oma-logo-img { height: 30px; }
+  .brand-divider { height: 22px; }
+  .brand-copy strong { font-size: 16px; }
+  .brand-copy small { font-size: 7px; letter-spacing: .1em; margin-top: 2px; }
   .live-orders, .simulate-long { display: none; }
   .simulate-button { min-height: 38px; padding: 0 10px; font-size: 10px; }
   .nav-wrap { overflow-x: auto; scrollbar-width: none; }

@@ -13,7 +13,7 @@ export default function Header() {
 
   return (
     <header className="site-header">
-      <div className="header-promo">ОМА ПО ПУТИ <span>—</span> сервис, который всегда рядом <ArrowUpRight size={17} /></div>
+      <div className="header-promo">ОМА МАСТЕРА <span>—</span> сервис, который всегда рядом <ArrowUpRight size={17} /></div>
       <div className="header-utility">
         <div className="header-container utility-inner">
           <span><MapPin size={14} /> Ваш регион: <strong>Минск</strong></span>
@@ -22,11 +22,12 @@ export default function Header() {
       </div>
       <div className="header-main">
         <div className="header-container header-main-inner">
-          <button className="oma-brand" onClick={() => setActiveTab('customer')} aria-label="ОМА ПО ПУТИ — главная">
-            <span className="oma-mark" aria-hidden="true"><i /><i /><i /></span>
-            <span className="brand-copy"><strong>ОМА</strong><small>ПО ПУТИ</small></span>
+          <button className="oma-brand" onClick={() => setActiveTab('customer')} aria-label="ОМА Мастера — главная">
+            <img src="/oma-logo.png" alt="ОМА" className="oma-logo-img" />
+            <span className="brand-divider" aria-hidden="true" />
+            <span className="brand-copy"><strong>МАСТЕРА</strong><small>СЕРВИС ДЛЯ ДОМА</small></span>
           </button>
-          <div className="header-message"><span className="header-message-dot" /> Платформа попутного бытового сервиса <strong>для дома и ремонта</strong></div>
+          <div className="header-message"><span className="header-message-dot" /> Платформа профессионального бытового сервиса <strong>для дома и ремонта</strong></div>
           <div className="header-actions">
             {serviceRequests.length > 0 && <span className="live-orders"><span /> {serviceRequests.length} {serviceRequests.length === 1 ? 'заявка' : serviceRequests.length < 5 ? 'заявки' : 'заявок'}</span>}
             <button className="simulate-button" onClick={() => setActiveTab('service')}><Wrench size={17} /><span>Вызвать мастера</span></button>

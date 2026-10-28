@@ -47,7 +47,7 @@ export default function UnitEconomicsView() {
           <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-50 rounded-bl-full" />
           <div className="flex items-center gap-2 mb-3">
             <CheckCircle size={18} className="text-emerald-500" />
-            <h3 className="text-sm font-bold text-emerald-600">С «ОМА ПО ПУТИ»</h3>
+            <h3 className="text-sm font-bold text-emerald-600">С «ОМА МАСТЕРА»</h3>
           </div>
           <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
             <p className="text-sm text-emerald-800 font-semibold">
@@ -139,7 +139,7 @@ export default function UnitEconomicsView() {
       {/* CJM */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h3 className="text-lg font-extrabold text-[#2A1B48] mb-5" style={{ fontFamily: 'Manrope' }}>
-          Customer Journey Map (CJM) — «ОМА ПО ПУТИ»
+          Customer Journey Map (CJM) — «ОМА МАСТЕРА»
         </h3>
 
         {/* Timeline */}
