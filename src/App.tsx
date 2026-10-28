@@ -4,14 +4,17 @@ import ToastContainer from './components/Toast';
 import CustomerView from './components/views/CustomerView';
 import ServiceView from './components/views/ServiceView';
 import MasterCabinetView from './components/views/MasterCabinetView';
+import RoleSelect from './components/RoleSelect';
 
 function AppContent() {
-  const { activeTab } = useApp();
+  const { activeTab, role } = useApp();
 
-  const pages: Record<string, { eyebrow: string; title: string; description: string; number: string; detail: string }> = {
-    customer: { eyebrow: 'КОРЗИНА ОМА', title: 'Товары и установка в одном заказе.', description: 'Отметьте товары для установки. Визит мастера подстроится под время доставки, а его карточка появится после принятия заявки.', number: '01', detail: 'Покупка + заявка' },
-    service: { eyebrow: 'ВЫЗОВ МАСТЕРА', title: 'Опишите задачу. Мастер откликнется.', description: 'Выберите работу из списка или расскажите, что нужно сделать. Подходящий мастер примет заявку и появится в её карточке.', number: '02', detail: 'Прямой вызов' },
-    master: { eyebrow: 'ОМА PRO', title: 'Заказы, которые по дороге.', description: 'Личный кабинет мастера: ближайшие заявки, доход за заказ и взаимозачёт внутри экосистемы.', number: '03', detail: 'Рабочее пространство' },
+  if (!role) return <RoleSelect />;
+
+  const pages: Record<string, { eyebrow: string; title: string }> = {
+    customer: { eyebrow: 'КОРЗИНА ОМА', title: 'Товары и установка в одном заказе.' },
+    service: { eyebrow: 'ВЫЗОВ МАСТЕРА', title: 'Опишите задачу. Мастер откликнется.' },
+    master: { eyebrow: 'ОМА PRO', title: 'Заказы, которые по дороге.' },
   };
 
   const page = pages[activeTab] || pages.customer;
@@ -25,9 +28,7 @@ function AppContent() {
           <div className="page-intro-copy">
             <p className="eyebrow"><span /> {page.eyebrow}</p>
             <h1 id="page-title">{page.title}</h1>
-            <p className="intro-description">{page.description}</p>
           </div>
-          <div className="intro-side" aria-hidden="true"><span className="intro-orbit orbit-one" /><span className="intro-orbit orbit-two" /><span className="intro-number">{page.number}</span><span className="intro-detail">{page.detail}</span></div>
         </section>
         {activeTab === 'customer' && <CustomerView />}
         {activeTab === 'service' && <ServiceView />}

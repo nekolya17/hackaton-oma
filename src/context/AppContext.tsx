@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
-import { TabId, Order, Toast, BarterState, LoyaltyState, IncomingOrder, ServiceRequest } from '../types';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
+import { TabId, UserRole, Order, Toast, LoyaltyState, IncomingOrder, ServiceRequest } from '../types';
 import { incomingOrders as defaultIncomingOrders } from '../data/mockData';
 
 interface AppState {
+  role: UserRole | null;
+  selectRole: (role: UserRole | null) => void;
   activeTab: TabId;
   setActiveTab: (tab: TabId) => void;
   orders: Order[];
@@ -12,8 +14,6 @@ interface AppState {
   toasts: Toast[];
   addToast: (toast: Omit<Toast, 'id'>) => void;
   removeToast: (id: string) => void;
-  barterState: BarterState;
-  settleBarter: () => void;
   loyaltyState: LoyaltyState;
   algorithmRunning: boolean;
   algorithmMatched: boolean;
@@ -26,19 +26,41 @@ const AppContext = createContext<AppState | undefined>(undefined);
 
 let orderCounter = 0;
 let toastCounter = 0;
+const requestStorageKey = 'oma-demo-requests-v1';
+
+function readSavedRequests(): { serviceRequests: ServiceRequest[]; incomingOrders: IncomingOrder[] } {
+  try {
+    const raw = window.localStorage.getItem(requestStorageKey);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      if (Array.isArray(saved.serviceRequests) && Array.isArray(saved.incomingOrders)) {
+        return {
+          serviceRequests: saved.serviceRequests.map((request: ServiceRequest) => ({ ...request, createdAt: new Date(request.createdAt) })),
+          incomingOrders: saved.incomingOrders,
+        };
+      }
+    }
+  } catch {
+    // The demo remains usable when browser storage is unavailable.
+  }
+  return { serviceRequests: [], incomingOrders: defaultIncomingOrders };
+}
+
+const savedRequests = readSavedRequests();
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [activeTab, setActiveTab] = useState<TabId>('customer');
+  const [role, setRole] = useState<UserRole | null>(null);
+  const [activeTab, setActiveTabState] = useState<TabId>('customer');
+  const selectRole = useCallback((nextRole: UserRole | null) => {
+    setRole(nextRole);
+    setActiveTabState(nextRole === 'master' ? 'master' : 'customer');
+  }, []);
+  const setActiveTab = useCallback((tab: TabId) => {
+    setActiveTabState(role === 'master' ? 'master' : tab === 'master' ? 'customer' : tab);
+  }, [role]);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [serviceRequests, setServiceRequests] = useState<ServiceRequest[]>([]);
+  const [serviceRequests, setServiceRequests] = useState<ServiceRequest[]>(savedRequests.serviceRequests);
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [barterState, setBarterState] = useState<BarterState>({
-    debtAmount: 480.00,
-    earnedAmount: 310.00,
-    isSettled: false,
-    settledDebt: 480.00,
-    bonusPercent: 5,
-  });
   const [loyaltyState] = useState<LoyaltyState>({
     totalPoints: 42,
     expiringPoints: 18,
@@ -47,7 +69,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   });
   const [algorithmRunning, setAlgorithmRunning] = useState(false);
   const [algorithmMatched, setAlgorithmMatched] = useState(false);
-  const [incomingOrders, setIncomingOrders] = useState<IncomingOrder[]>(defaultIncomingOrders);
+  const [incomingOrders, setIncomingOrders] = useState<IncomingOrder[]>(savedRequests.incomingOrders);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(requestStorageKey, JSON.stringify({ serviceRequests, incomingOrders }));
+    } catch {
+      // Keep the current in-memory state if browser storage is unavailable.
+    }
+  }, [serviceRequests, incomingOrders]);
+
+  useEffect(() => {
+    const syncRequests = (event: StorageEvent) => {
+      if (event.key !== requestStorageKey) return;
+      const saved = readSavedRequests();
+      setServiceRequests(saved.serviceRequests);
+      setIncomingOrders(saved.incomingOrders);
+    };
+    window.addEventListener('storage', syncRequests);
+    return () => window.removeEventListener('storage', syncRequests);
+  }, []);
 
   const toastTimeouts = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
@@ -82,7 +123,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       type: 'single',
       district: input.district,
       address: input.address,
-      deviation: input.source === 'cart' ? 'Время визита связано с доставкой товара' : 'Прямой вызов мастера',
       tasks: input.description,
       duration: input.arrivalWindow,
       income: Math.round(input.estimatedPrice * 0.8),
@@ -92,19 +132,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }, ...prev]);
     addToast({ message: 'Заявка отправлена. Покажем мастера, когда он примет заказ.', type: 'success' });
     return id;
-  }, [addToast]);
-
-  const settleBarter = useCallback(() => {
-    setBarterState(prev => {
-      const credit = prev.earnedAmount * (1 + prev.bonusPercent / 100);
-      const newDebt = Math.max(0, prev.debtAmount - credit);
-      return { ...prev, isSettled: true, settledDebt: newDebt };
-    });
-    addToast({
-      message: '✅ Взаимозачёт выполнен! 100% денег остаются внутри экосистемы ОМА!',
-      type: 'success',
-      duration: 6000,
-    });
   }, [addToast]);
 
   const runAlgorithm = useCallback(() => {
@@ -129,17 +156,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setOrders(prev => prev.map(order => order.serviceRequestId === requestId ? { ...order, status: 'assigned', assignedMasterId: 'master-1' } : order));
     }
     addToast({
-      message: '✅ Заказ принят в маршрут!',
+      message: '✅ Заявка принята!',
       type: 'success',
     });
   }, [addToast, incomingOrders]);
 
   return (
     <AppContext.Provider value={{
+      role, selectRole,
       activeTab, setActiveTab,
       orders, addOrder, serviceRequests, createServiceRequest,
       toasts, addToast, removeToast,
-      barterState, settleBarter,
       loyaltyState,
       algorithmRunning, algorithmMatched, runAlgorithm,
       incomingOrders, acceptOrder,

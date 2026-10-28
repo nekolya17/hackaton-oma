@@ -1,15 +1,8 @@
 import { useApp } from '../context/AppContext';
-import { TabId } from '../types';
-import { ShoppingCart, MapPinned, HardHat, ChartNoAxesCombined, Wrench, MapPin, Phone, ArrowUpRight, Menu } from 'lucide-react';
-
-const tabs: { id: TabId; label: string; shortLabel: string; icon: React.ReactNode }[] = [
-  { id: 'customer', label: 'Корзина', shortLabel: 'Корзина', icon: <ShoppingCart size={18} /> },
-  { id: 'service', label: 'Вызов мастера', shortLabel: 'Вызов', icon: <Wrench size={18} /> },
-  { id: 'master', label: 'Кабинет мастера', shortLabel: 'Кабинет', icon: <HardHat size={18} /> },
-];
+import { Wrench, MapPin, Phone, ArrowUpRight, UsersRound } from 'lucide-react';
 
 export default function Header() {
-  const { activeTab, setActiveTab, serviceRequests } = useApp();
+  const { role, selectRole, setActiveTab, serviceRequests } = useApp();
 
   return (
     <header className="site-header">
@@ -22,27 +15,17 @@ export default function Header() {
       </div>
       <div className="header-main">
         <div className="header-container header-main-inner">
-          <button className="oma-brand" onClick={() => setActiveTab('customer')} aria-label="ОМА Мастера — главная">
+          <button className="oma-brand" onClick={() => setActiveTab(role === 'master' ? 'master' : 'customer')} aria-label="ОМА Мастера — главная">
             <img src="/oma-logo.png" alt="ОМА" className="oma-logo-img" />
             <span className="brand-divider" aria-hidden="true" />
             <span className="brand-copy"><strong>МАСТЕРА</strong><small>СЕРВИС ДЛЯ ДОМА</small></span>
           </button>
-          <div className="header-message"><span className="header-message-dot" /> Платформа профессионального бытового сервиса <strong>для дома и ремонта</strong></div>
           <div className="header-actions">
-            {serviceRequests.length > 0 && <span className="live-orders"><span /> {serviceRequests.length} {serviceRequests.length === 1 ? 'заявка' : serviceRequests.length < 5 ? 'заявки' : 'заявок'}</span>}
-            <button className="simulate-button" onClick={() => setActiveTab('service')}><Wrench size={17} /><span>Вызвать мастера</span></button>
+            {role === 'customer' && serviceRequests.length > 0 && <span className="live-orders"><span /> {serviceRequests.length} {serviceRequests.length === 1 ? 'заявка' : serviceRequests.length < 5 ? 'заявки' : 'заявок'}</span>}
+            {role === 'customer' && <button className="simulate-button" onClick={() => setActiveTab('service')}><Wrench size={17} /><span>Вызвать мастера</span></button>}
+            <button className="role-switch-button" type="button" onClick={() => selectRole(null)} aria-label="Сменить роль"><UsersRound size={17} /><span>Сменить роль</span></button>
           </div>
         </div>
-      </div>
-      <div className="nav-wrap">
-        <nav className="header-container primary-nav" aria-label="Разделы приложения">
-          <span className="nav-catalog"><Menu size={20} /> ВСЕ СЕРВИСЫ</span>
-          <div className="nav-tabs">
-            {tabs.map(tab => <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={activeTab === tab.id ? 'nav-tab active' : 'nav-tab'} aria-current={activeTab === tab.id ? 'page' : undefined}>
-              {tab.icon}<span className="tab-full">{tab.label}</span><span className="tab-short">{tab.shortLabel}</span>
-            </button>)}
-          </div>
-        </nav>
       </div>
     </header>
   );

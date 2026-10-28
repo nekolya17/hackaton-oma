@@ -1,4 +1,5 @@
 export type TabId = 'customer' | 'service' | 'dispatcher' | 'master' | 'economics';
+export type UserRole = 'customer' | 'master';
 
 export interface ServiceRequest {
   id: string;
@@ -94,14 +95,6 @@ export interface AlgorithmMetrics {
   stmUpsell: number;
 }
 
-export interface BarterState {
-  debtAmount: number;
-  earnedAmount: number;
-  isSettled: boolean;
-  settledDebt: number;
-  bonusPercent: number;
-}
-
 export interface LoyaltyState {
   totalPoints: number;
   expiringPoints: number;
@@ -121,7 +114,6 @@ export interface IncomingOrder {
   type: 'single' | 'cluster';
   district: string;
   address: string;
-  deviation: string;
   tasks: string;
   duration: string;
   income: number;
