@@ -515,3 +515,390 @@ button.service-path:hover { border-color:#f1a13c; transform:translateY(-2px); }
 .request-assigned-master small { display:flex; align-items:center; gap:4px; color:#23845c; font-size:11px; }
 @media (max-width:900px) { .service-form-layout { grid-template-columns:1fr; } }
 @media (max-width:700px) { .service-paths { grid-template-columns:1fr; } .service-path { min-height:auto; } .service-form-panel,.service-help-card { padding:19px; } .service-form-row { grid-template-columns:1fr; } .request-status-head { flex-direction:column; } .request-status-meta { align-items:flex-start; } .delivery-option { grid-template-columns:1fr; } .delivery-option > span + span { padding:10px 0 0; border-left:0; border-top:1px solid #e8d9c4; } }
+
+/* Master Cabinet - OMA PRO (Design matching Cart) */
+.master-profile-panel {
+  background: white;
+  border: 1px solid #e8e5e2;
+  border-radius: 14px;
+  box-shadow: 0 3px 16px rgba(40,36,58,0.05);
+  padding: 22px 26px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.master-profile-user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.master-avatar-box {
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f5aa45, #f59e0b);
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  box-shadow: 0 6px 16px rgba(245, 170, 69, 0.28);
+  flex: none;
+}
+.master-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.master-profile-info h2 {
+  font: 800 20px/1.2 'Rubik', sans-serif;
+  color: #251b39;
+}
+.master-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.badge-pill.verified {
+  background: #e4f5eb;
+  color: #197a51;
+}
+.badge-pill.unp {
+  background: #f4f2f0;
+  color: #6a6470;
+}
+.badge-pill.rating {
+  background: #fff5e6;
+  color: #b86723;
+}
+.master-meta-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.master-scoring-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fcf9f5;
+  border: 1px solid #efe8e1;
+  color: #3b304c;
+  font-size: 12px;
+}
+.master-scoring-badge svg {
+  color: #e5872c;
+  flex: none;
+}
+.master-route-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #f2edf8;
+  color: #2a1b48;
+  font-size: 12px;
+  font-weight: 700;
+}
+.master-route-badge svg {
+  color: #e37d28;
+  flex: none;
+}
+
+.master-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.22fr) minmax(350px, .78fr);
+  align-items: start;
+  gap: 20px;
+}
+.master-main-column {
+  display: grid;
+  gap: 20px;
+}
+.master-order-row {
+  position: relative;
+  width: 100%;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px 14px 14px;
+  text-align: left;
+  background: #fff;
+  border: 2px solid #eeece9;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.master-order-row:hover {
+  border-color: #f2b66c;
+  background: #fffcf8;
+}
+.master-order-row.selected {
+  border-color: #ed963a;
+  background: #fffaf3;
+  box-shadow: 0 5px 18px rgba(239, 157, 54, 0.12);
+}
+.master-order-row.accepted {
+  border-color: #bfe5cf;
+  background: #f7fdf9;
+}
+.master-order-badge-icon {
+  width: 58px;
+  height: 58px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #faf8f4, #eeeae5);
+  border: 1px solid #ece9e4;
+  border-radius: 10px;
+  font-size: 26px;
+}
+.master-order-info {
+  min-width: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+}
+.master-order-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #ad6525;
+}
+.master-order-info strong {
+  color: #252039;
+  font: 700 15px/1.3 'Rubik', sans-serif;
+}
+.master-order-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #6d6773;
+}
+.master-order-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.master-order-price {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  white-space: nowrap;
+  gap: 2px;
+}
+.master-order-price strong {
+  font: 800 22px/1 'Rubik', sans-serif;
+  color: #178358;
+}
+.master-order-price small {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8c8691;
+}
+.master-accept-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #f49b36;
+  color: #241b38;
+  font: 800 12px/1 'Rubik', sans-serif;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+.master-accept-button:hover {
+  background: #ffb14e;
+  transform: translateY(-1px);
+}
+.master-accepted-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: #e4f5eb;
+  color: #188257;
+  font: 800 12px 'Rubik', sans-serif;
+}
+.master-barter-balances {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0;
+}
+.barter-balance-box {
+  padding: 16px;
+  border-radius: 10px;
+  background: #faf8f5;
+  border: 1px solid #ede8e3;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.barter-balance-box.debt {
+  background: #fff8f8;
+  border-color: #f7dede;
+}
+.barter-balance-box.debt.settled {
+  background: #f4fbf7;
+  border-color: #d6f2e2;
+}
+.barter-balance-box.earned {
+  background: #fffaf2;
+  border-color: #faebd6;
+}
+.barter-balance-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #79717d;
+}
+.barter-balance-val {
+  font: 800 24px/1.1 'Rubik', sans-serif;
+}
+.barter-balance-val.red { color: #dc3545; }
+.barter-balance-val.green { color: #16805b; }
+.barter-balance-val.amber { color: #d67a1f; }
+.master-barter-action-btn {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: linear-gradient(100deg, #f5aa45, #f39726);
+  color: #241b38;
+  border-radius: 8px;
+  font: 800 13px 'Rubik', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(245, 170, 69, 0.25);
+  border: none;
+  transition: all 0.2s;
+}
+.master-barter-action-btn:hover:not(:disabled) {
+  background: #ffb14e;
+  transform: translateY(-2px);
+}
+.master-barter-action-btn.settled {
+  background: #198754;
+  color: white;
+  box-shadow: none;
+  cursor: default;
+}
+.master-barter-breakdown {
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 9px;
+  background: #f2f9f5;
+  border: 1px solid #d8efe3;
+  font-size: 12px;
+  color: #2a3d33;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.master-chart-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 95px;
+  margin: 18px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #efebe7;
+}
+.master-chart-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  height: 100%;
+  justify-content: flex-end;
+}
+.master-chart-bar {
+  width: 100%;
+  border-radius: 5px 5px 0 0;
+  background: linear-gradient(to top, #2a1b48, #f49b36);
+  transition: height 0.4s ease;
+}
+.master-chart-val {
+  font-size: 10px;
+  font-weight: 800;
+  color: #178358;
+}
+.master-chart-day {
+  font-size: 11px;
+  font-weight: 700;
+  color: #7d7782;
+}
+.master-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+.master-stat-card {
+  padding: 12px 14px;
+  border-radius: 9px;
+  background: #fbf9f6;
+  border: 1px solid #ece7e1;
+  text-align: center;
+}
+.master-stat-card strong {
+  display: block;
+  font: 800 22px/1 'Rubik', sans-serif;
+  color: #251b39;
+}
+.master-stat-card small {
+  display: block;
+  font-size: 11px;
+  color: #726b77;
+  margin-top: 3px;
+}
+@media (max-width: 1024px) {
+  .master-layout { grid-template-columns: 1fr; }
+  .master-profile-panel { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 640px) {
+  .master-order-row {
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    grid-template-rows: auto auto;
+    row-gap: 8px;
+    padding: 12px;
+  }
+  .master-order-price {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f0eee9;
+    padding-top: 10px;
+  }
+  .master-barter-balances { grid-template-columns: 1fr; }
+}

@@ -5,9 +5,7 @@ import { ShoppingCart, MapPinned, HardHat, ChartNoAxesCombined, Wrench, MapPin, 
 const tabs: { id: TabId; label: string; shortLabel: string; icon: React.ReactNode }[] = [
   { id: 'customer', label: 'Корзина', shortLabel: 'Корзина', icon: <ShoppingCart size={18} /> },
   { id: 'service', label: 'Вызов мастера', shortLabel: 'Вызов', icon: <Wrench size={18} /> },
-  { id: 'dispatcher', label: 'Гео-диспетчер', shortLabel: 'Карта', icon: <MapPinned size={18} /> },
   { id: 'master', label: 'Кабинет мастера', shortLabel: 'Кабинет', icon: <HardHat size={18} /> },
-  { id: 'economics', label: 'Экономика проекта', shortLabel: 'Экономика', icon: <ChartNoAxesCombined size={18} /> },
 ];
 
 export default function Header() {
